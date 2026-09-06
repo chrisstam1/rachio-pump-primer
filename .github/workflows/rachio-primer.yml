@@ -1,0 +1,43 @@
+name: Rachio pump primer
+
+on:
+  schedule:
+    # GitHub cron is UTC. Cover the window in which the BACK schedule can start,
+    # with margin on both sides. Get-RachioIds.ps1 prints the next run time in
+    # UTC and local time to help you set this.
+    # Backyard schedule starts 6:00 AM Eastern = 10:00 UTC (EDT) or 11:00 UTC (EST).
+    # Below: every 10 minutes from 09:00 to 11:50 UTC, covering both.
+
+    - cron: '*/10 9-11 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'normal | dry-run | prime-now'
+        default: 'dry-run'
+
+# Never let two runs prime at the same time. A queued run waits, then sees the
+# back is already running (or the slot has passed) and exits.
+concurrency:
+  group: rachio-primer
+  cancel-in-progress: false
+
+jobs:
+  primer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run primer
+        shell: pwsh
+        env:
+          RACHIO_API_TOKEN: ${{ secrets.RACHIO_API_TOKEN }}
+          RACHIO_BACK_DEVICE_ID: ${{ secrets.RACHIO_BACK_DEVICE_ID }}
+          RACHIO_FRONT_DEVICE_ID: ${{ secrets.RACHIO_FRONT_DEVICE_ID }}
+          RACHIO_FRONT_ZONE_ID: ${{ secrets.RACHIO_FRONT_ZONE_ID }}
+          PRIMER_MODE: ${{ github.event.inputs.mode }}
+        run: |
+          switch ($env:PRIMER_MODE) {
+            'dry-run'   { ./Invoke-RachioPrimer.ps1 -DryRun }
+            'prime-now' { ./Invoke-RachioPrimer.ps1 -PrimeNow }
+            default     { ./Invoke-RachioPrimer.ps1 }
+          }
