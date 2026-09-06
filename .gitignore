@@ -1,0 +1,2 @@
+# Holds your API token. Never commit it.
+config.json
