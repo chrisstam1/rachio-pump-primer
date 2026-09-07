@@ -39,5 +39,5 @@ jobs:
           switch ($env:PRIMER_MODE) {
             'dry-run'   { ./Invoke-RachioPrimer.ps1 -DryRun }
             'prime-now' { ./Invoke-RachioPrimer.ps1 -PrimeNow }
-            default     { ./Invoke-RachioPrimer.ps1 }
+            default     { ./Invoke-RachioPrimer.ps1 -LookaheadMinutes 35 }
           }
