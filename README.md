@@ -65,7 +65,7 @@ responds, start the primer immediately:
 Each scheduled run costs about a minute of Actions time unless it is the one
 that waits for the slot. With a four-hour daily window that is roughly 40 to 60
 minutes per day, inside the free tier for private repos. GitHub cron can lag
-by a few minutes at busy times. The 22-minute lookahead absorbs that.
+and thin out runs at busy times; in practice runs land about every 15 to 20 minutes. The 35-minute lookahead absorbs that.
 
 ### Option B: this PC with Task Scheduler
 
