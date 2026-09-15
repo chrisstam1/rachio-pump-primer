@@ -23,7 +23,7 @@ before the back zones open.
 In the Rachio app: Profile icon, then **API key**, then Copy. Then in PowerShell:
 
 ```powershell
-cd "C:\Users\ChrisStam\OneDrive - Wtmrk\Documents\rachio api"
+cd "C:\path\to\rachio-pump-primer"
 .\Get-RachioIds.ps1
 ```
 
@@ -72,7 +72,7 @@ and thin out runs at busy times; in practice runs land about every 15 to 20 minu
 Only if the PC is awake at watering time. Run once in an elevated PowerShell:
 
 ```powershell
-$here = "C:\Users\ChrisStam\OneDrive - Wtmrk\Documents\rachio api"
+$here = "C:\path\to\rachio-pump-primer"
 $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$here\Invoke-RachioPrimer.ps1`""
 $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval (New-TimeSpan -Minutes 10) -RepetitionDuration (New-TimeSpan -Days 3650)
 $settings = New-ScheduledTaskSettingsSet -WakeToRun -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Minutes 40)
