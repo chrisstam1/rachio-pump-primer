@@ -5,10 +5,11 @@ on:
     # GitHub cron is UTC. Cover the window in which the BACK schedule can start,
     # with margin on both sides. Get-RachioIds.ps1 prints the next run time in
     # UTC and local time to help you set this.
-    # Backyard schedule starts 6:00 AM Eastern = 10:00 UTC (EDT) or 11:00 UTC (EST).
-    # Below: every 10 minutes from 09:00 to 11:50 UTC, covering both.
+    # Seeding (Sep 15 - Oct 11, 2026): Back Grow-in starts 6:41 AM, 10:41 AM, 2:41 PM
+    # Eastern = 10:41, 14:41, 18:41 UTC. After Oct 11 return to '*/10 9-11 * * *'
+    # (normal Back schedule at 6:00 AM Eastern = 10:00 UTC EDT / 11:00 UTC EST).
 
-    - cron: '*/10 9-11 * * *'
+    - cron: '*/10 10,14,18 * * *'
   workflow_dispatch:
     inputs:
       mode:
